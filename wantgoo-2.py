@@ -105,7 +105,7 @@ def update_google_sheet(sheet_id, range_name, values):
 def process_etf_data():
     sheet_id = "1ouX_BHS9g3HQBgyo73T2uc37SdAZ0diR1LgHn6YAWwM"
     read_range = "ETF分析!C5:C33"  # 讀取 ETF 代碼的範圍
-    write_range = "ETF分析!L5:L33"  # 寫入年報酬率的範圍
+    write_range = "ETF分析!I5:I33"  # 寫入年報酬率的範圍
 
     # 讀取 Google Sheets 的 ETF 代碼
     etf_codes = get_etf_codes(sheet_id, read_range)
