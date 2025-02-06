@@ -1,48 +1,41 @@
+# è¨­å®š PowerShell åŸ·è¡Œç­–ç•¥
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
 
-
-# ³]©w¥Ø¼Ğ¥Ø¿ı©MÀÉ®×¦WºÙ
-$targetDirectory = "C:\Users\kaisda\Desktop\autoUpdateETF"
+# è¨­å®šå°ˆæ¡ˆè·¯å¾‘èˆ‡ Python è…³æœ¬
+$targetDirectory = "C:\Users\user\Desktop\autoUpdateETF-master"
 $pythonScript = "wantgoo-2.py"
 
-# ¶i¤J¥Ø¼Ğ¥Ø¿ı
+# åˆ‡æ›åˆ°å°ˆæ¡ˆè³‡æ–™å¤¾
 Set-Location -Path $targetDirectory
 
-# Åã¥Ü¶}©l°T®§
+# å•Ÿå‹• HTTP ä¼ºæœå™¨
 Write-Host "Starting HTTP server..."
-
-# ±Ò°Ê HTTP ¦øªA¾¹
 $httpServer = Start-Process -NoNewWindow -FilePath "python" -ArgumentList "-m http.server 8000" -PassThru
 
-# µ¥«İ HTTP ¦øªA¾¹±Ò°Ê
+# ç­‰å¾…ä¼ºæœå™¨å•Ÿå‹•
 Write-Host "Waiting for the server to start..."
 Start-Sleep -Seconds 5
 
-# ½T»{¦øªA¾¹¬O§_±Ò°Ê¦¨¥\
+# ç¢ºèª HTTP ä¼ºæœå™¨æ˜¯å¦æ­£å¸¸é‹è¡Œ
 try {
     $response = Invoke-WebRequest -Uri "http://127.0.0.1:8000" -UseBasicParsing
     if ($response.StatusCode -eq 200) {
         Write-Host "HTTP server is running. Ready to execute Python script."
-        
-        # ´£¥Ü§Y±N°õ¦æ Python ¸}¥»
+
+        # åŸ·è¡Œ Python è…³æœ¬
         Write-Host "Executing Python script: $pythonScript..."
-        
-        # °õ¦æ Python ¸}¥»
-        python $pythonScript
-        
-        # ´£¥Ü Python ¸}¥»°õ¦æ§¹²¦
+        & python $pythonScript
         Write-Host "Python script executed successfully. Data written to Google Sheets."
-    } else {
+    }
+    else {
         Write-Host "HTTP server did not start correctly. Status code: $($response.StatusCode)"
     }
-} catch {
+}
+catch {
     Write-Host "Failed to connect to HTTP server: $_"
 }
 
-# °±¤î HTTP ¦øªA¾¹
+# é—œé–‰ HTTP ä¼ºæœå™¨
 Write-Host "Stopping HTTP server..."
-Stop-Process -Id $httpServer.Id -Force
+Stop-Process -Name "python" -Force
 Write-Host "HTTP server stopped. Task completed."
-
-
-
-
